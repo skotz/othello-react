@@ -1,2 +1,1 @@
-# othello-react
-React implementation of Othello (game)
+The game of Othello written in React

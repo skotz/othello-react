@@ -1,0 +1,98 @@
+.othello {
+    font-size: 20px;
+    width: 400px;
+    margin: 100px auto;
+}
+.top-bar {
+    background-color: #fff;
+    color: #000;
+    border-top: 1px solid #000;
+    border-left: 1px solid black;
+}
+.black-turn .top-bar {
+    background-color: #000;
+    color: #fff;
+}
+.status {
+    float: left;
+    line-height: 50px;
+    padding: 0 0 0 25px;
+}
+.white-score,
+.black-score {
+    line-height: 50px;
+    width: 50px;
+    height: 50px;
+    float: right;
+    text-align: center;
+    box-sizing: border-box;
+}
+.white-score {
+    border-left: 1px solid black;
+    background-color: #fff;
+    color: #000;
+}
+.black-score {
+    background-color: #000;
+    color: #fff;
+}
+.board {
+}
+.square {
+    float: left;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(36, 153, 73);
+    border-top: 1px solid #000;
+    border-left: 1px solid #000;
+    box-sizing: border-box;
+}
+.square:nth-child(8n) {
+    border-right: 1px solid #000;
+}
+.square:nth-child(n + 57) {
+    border-bottom: 1px solid #000;
+}
+.square:hover {
+    background-color: rgb(36, 153, 73, 0.8);
+}
+.square:active {
+    background-color: rgb(36, 153, 73, 0.6);
+}
+.square.white:before,
+.square.black:before,
+.square.avail:before {
+    content: "";
+    width: 80%;
+    height: 80%;
+    position: relative;
+    left: 10%;
+    top: 10%;
+    display: inline-block;
+    background-color: #fff;
+    border-radius: 100%;
+    transition: background-color .25s ease-in-out;
+}
+.square.white:before {
+    background-color: #fff;
+}
+.square.black:before {
+    background-color: #000;
+}
+.white-turn .square.avail:before,
+.black-turn .square.avail:before {
+    width: 30%;
+    height: 30%;
+    left: 35%;
+    top: 35%;
+    background-color: #fff;
+    opacity: 0.5;
+}
+.black-turn .square.avail:before {
+    background-color: #000;
+}
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
