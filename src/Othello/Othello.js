@@ -34,12 +34,12 @@ export default class Othello extends Component {
             }
             rows.push(squares);
         }
-        var gameState = this.state.state == 1 ? (this.state.player === 1 ? "white-turn" : "black-turn") : "game-over";
+        var gameState = this.state.state === 1 ? (this.state.player === 1 ? "white-turn" : "black-turn") : "game-over";
         return (
             <div className={"othello " + gameState}>
                 <div className="top-bar">
                     <div className="status">
-                        {this.state.state == 1 ? (this.state.player == 1 ? "White to Move" : "Black to Move") : "Game Over"}
+                        {this.state.state === 1 ? (this.state.player === 1 ? "White to Move" : "Black to Move") : "Game Over"}
                     </div>
                     <div className="scores clearfix">
                         <div className="black-score">
@@ -70,7 +70,7 @@ export default class Othello extends Component {
             cssAvailable = "avail";
         }
         return (
-            <div className={"square " + cssPlayer + " " + cssAvailable} onClick={e => _this.squareHandler(x, y, e)} data-x={x} data-y={y}>
+            <div className={"square " + cssPlayer + " " + cssAvailable} onClick={e => _this.squareHandler(x, y, e)} data-x={x} data-y={y} key={x + "-" + y}>
             </div>
         );
     }
