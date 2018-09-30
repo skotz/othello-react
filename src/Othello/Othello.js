@@ -8,7 +8,7 @@ export default class Othello extends Component {
         this.state = { 
             state: 1,
             player: 1,
-            depth: 4, /* We can increase the AI search depth once it doesn't bog down the UI */
+            depth: 8, /* We can increase the AI search depth once it doesn't bog down the UI */
             score: {
                 white: 2,
                 black: 2
@@ -114,6 +114,7 @@ export default class Othello extends Component {
                     // Have the computer play
                     var bestMove = this.findMove(newBoard, newPlayer, this.state.depth);
                     this.squareHandler(bestMove.x, bestMove.y);
+                    console.log("Move Score: " + bestMove.score);
                 }
             });
         }
@@ -502,7 +503,7 @@ export default class Othello extends Component {
         var opponent = this.getOtherPlayer(player);
         if (depth <= 0) {
             // Evaluation is based solely on piece count
-            return this.evaluate(board);
+            return { score: this.evaluate(board) };
         }
         
         var moves = this.getAvailableMoves(board, player);
@@ -510,7 +511,7 @@ export default class Othello extends Component {
             // Player has no valid moves
             if (this.getAvailableMoves(board, opponent).length === 0) {
                 // Opponent also has no valid moves, so the game is over
-                return this.evaluate(board);
+                return { score: this.evaluate(board) };
             }
             
             // Find moves for the opponent instead
@@ -525,10 +526,19 @@ export default class Othello extends Component {
             
             // Recursively look for a good counter move
             var counter = this.findMove(copy, opponent, depth - 1);
-            if (counter.score > best.score) {
-                best.score = counter.score;
-                best.x = moves[i].x;
-                best.y = moves[i].y;
+            if (player === 1) {
+                if (counter.score > best.score) {
+                    best.score = counter.score;
+                    best.x = moves[i].x;
+                    best.y = moves[i].y;
+                }
+            }
+            if (player === 2) {
+                if (counter.score < best.score) {
+                    best.score = counter.score;
+                    best.x = moves[i].x;
+                    best.y = moves[i].y;
+                }
             }
         }
         
