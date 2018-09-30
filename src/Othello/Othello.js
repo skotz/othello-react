@@ -37,21 +37,31 @@ export default class Othello extends Component {
         var gameState = this.state.state === 1 ? (this.state.player === 1 ? "white-turn" : "black-turn") : "game-over";
         return (
             <div className={"othello " + gameState}>
-                <div className="top-bar">
-                    <div className="status">
-                        {this.state.state === 1 ? (this.state.player === 1 ? "White to Move" : "Black to Move") : "Game Over"}
-                    </div>
-                    <div className="scores clearfix">
-                        <div className="black-score">
-                            {this.state.score.black}
+                <div>
+                    <div>
+                        <div className="status-bar">
+                            <div className="status">
+                                Black Player
+                            </div>
+                            <div className="scores black-score clearfix">
+                                {this.state.score.black}
+                            </div>
                         </div>
-                        <div className="white-score">
-                            {this.state.score.white}
+                        <div className="board clearfix">
+                            {rows}
+                            <div className="menu">
+                                <span className="menu-message">Game Over</span>
+                            </div>
+                        </div>
+                        <div className="status-bar">
+                            <div className="status">
+                                White Player
+                            </div>
+                            <div className="scores white-score clearfix">
+                                {this.state.score.white}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className="board clearfix">
-                    {rows}
                 </div>
             </div>
         );

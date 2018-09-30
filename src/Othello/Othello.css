@@ -1,47 +1,72 @@
+html,
+body,
+#root {
+    height: 100%;
+}
+body {
+    background: radial-gradient(ellipse at center, #eee 1%, #aaa 100%); 
+}
 .othello {
     font-size: 20px;
-    width: 400px;
-    margin: 100px auto;
+    display: table;
+    height: 100%; 
+    width: 100%;
 }
-.top-bar {
-    background-color: #fff;
-    color: #000;
-    border-top: 1px solid #000;
-    border-left: 1px solid black;
+.othello > div {
+    display: table-cell;
+    vertical-align: middle;
 }
-.black-turn .top-bar {
-    background-color: #000;
-    color: #fff;
+.othello > div > div {
+    margin: auto;
+}
+.status-bar {
+    line-height: 35px;
+    height: 35px;
+    margin: 15px auto;
 }
 .status {
     float: left;
-    line-height: 50px;
-    padding: 0 0 0 25px;
+}
+.scores:before {
+    content: "Score";
+    float: left;
+    margin-left: 15px;
+    color: rgb(0, 0, 0, 0.25);
 }
 .white-score,
 .black-score {
-    line-height: 50px;
-    width: 50px;
-    height: 50px;
+    width: 20vw;
     float: right;
-    text-align: center;
+    text-align: right;
     box-sizing: border-box;
+    padding-right: 15px;
+    border-radius: 3px;
+    background-color: #eee;
+    min-width: 100px;
 }
-.white-score {
-    border-left: 1px solid black;
-    background-color: #fff;
-    color: #000;
+.black-turn .black-score,
+.white-turn .white-score {
+    animation: pulse 1s infinite;
 }
-.black-score {
-    background-color: #000;
-    color: #fff;
+
+@keyframes pulse {
+    0% {
+        background-color: #eee;
+    }
+    50% {
+        background-color: #fbb;
+    }
+    100% {
+        background-color: #eee;
+    }
 }
 .board {
+    margin: auto;
 }
 .square {
     float: left;
-    width: 50px;
-    height: 50px;
+    width: 12.5%;
+    height: 12.5%;
     background-color: rgb(36, 153, 73);
     border-top: 1px solid #000;
     border-left: 1px solid #000;
@@ -53,6 +78,18 @@
 .square:nth-child(n + 57) {
     border-bottom: 1px solid #000;
 }
+.square:nth-child(1) {
+    border-top-left-radius: 3px;
+}
+.square:nth-child(8) {
+    border-top-right-radius: 3px;
+}
+.square:nth-child(57) {
+    border-bottom-left-radius: 3px;
+}
+.square:nth-child(64) {
+    border-bottom-right-radius: 3px;
+}
 .square:hover {
     background-color: rgb(36, 153, 73, 0.8);
 }
@@ -63,6 +100,7 @@
 .square.black:before,
 .square.avail:before {
     content: "";
+    display: table !important; /* can't figure out why this doesn't stay set without the ugly important flag... */
     width: 80%;
     height: 80%;
     position: relative;
@@ -80,7 +118,8 @@
     background-color: #000;
 }
 .white-turn .square.avail:before,
-.black-turn .square.avail:before {
+.black-turn .square.avail:before,
+.game-over .square.avail:before {
     width: 30%;
     height: 30%;
     left: 35%;
@@ -95,4 +134,74 @@
     content: "";
     display: table;
     clear: both;
+}
+.menu {
+    position: absolute;
+    background-color: rgb(0, 0, 0, 0.8);
+    z-index: 100;
+    display: none;
+}
+.game-over .menu {
+    display: block;
+}
+.menu-message {
+    display: block;
+    margin-top: 25%;
+    color: #fff;
+    text-align: center;
+    font-size: 60px;
+    padding: 0 15px;
+}
+
+@media (orientation: landscape) {
+    .board,
+    .menu {
+        width: calc(80vh - 100px);
+        height: calc(80vh - 100px);
+    }
+    .status-bar {
+        width: calc(80vh - 100px);
+    }
+    .white-score,
+    .black-score {
+        width: calc((80vh - 100px) / 4);
+    }
+}
+@media screen and (orientation: portrait) {
+    .board,
+    .menu {
+        width: 80vw;
+        height: 80vw;
+    }
+    .status-bar {
+        width: 80vw;
+    }
+}
+@media screen and (max-width: 360px) {
+    .scores {
+        width: auto;
+        min-width: auto;
+    }
+    .scores:before {
+        content: "";
+    }
+}
+@media screen and (max-height: 700px) {
+    .scores {
+        width: auto;
+        min-width: auto;
+    }
+    .scores:before {
+        content: "";
+    }
+}
+
+body:after {
+    content: "Scott Clayton 2018";
+    position: fixed;
+    bottom: 3px;
+    right: 3px;
+    font-size: 10px;
+    color: #777;
+    z-index: -1;
 }
