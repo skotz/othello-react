@@ -112,9 +112,10 @@ export default class Othello extends Component {
                 // After updating the player's move
                 if (newState === 1 && newPlayer === 2) {
                     // Have the computer play
+                    num_evals = 0;
                     var bestMove = this.findMove(newBoard, newPlayer, this.state.depth);
                     this.squareHandler(bestMove.x, bestMove.y);
-                    console.log("Move Score: " + bestMove.score);
+                    console.log("Move Score: " + bestMove.score + " Evals: " + num_evals);
                 }
             });
         }
@@ -499,7 +500,8 @@ export default class Othello extends Component {
         return this.getScore(board, 1) - this.getScore(board, 2);
     }
     
-    findMove(board, player, depth) {
+    findMove(board, player, depth, alpha = -1000000, beta = 1000000) {
+        num_evals++;
         var opponent = this.getOtherPlayer(player);
         if (depth <= 0) {
             // Evaluation is based solely on piece count
@@ -515,7 +517,7 @@ export default class Othello extends Component {
             }
             
             // Find moves for the opponent instead
-            return this.findMove(board, opponent, depth - 1);
+            return this.findMove(board, opponent, depth - 1, alpha, beta);
         }
         
         var best = { score: player === 1 ? -100000 : 100000, x: moves[0].x, y: moves[0].y };
@@ -525,12 +527,16 @@ export default class Othello extends Component {
             this.makeMove(copy, player, moves[i].x, moves[i].y);
             
             // Recursively look for a good counter move
-            var counter = this.findMove(copy, opponent, depth - 1);
+            var counter = this.findMove(copy, opponent, depth - 1, alpha, beta);
             if (player === 1) {
                 if (counter.score > best.score) {
                     best.score = counter.score;
                     best.x = moves[i].x;
                     best.y = moves[i].y;
+                }
+                alpha = Math.max(alpha, counter.score);
+                if (alpha >= beta) {
+                    break;
                 }
             }
             if (player === 2) {
@@ -538,6 +544,10 @@ export default class Othello extends Component {
                     best.score = counter.score;
                     best.x = moves[i].x;
                     best.y = moves[i].y;
+                }
+                beta = Math.min(beta, counter.score);
+                if (alpha >= beta) {
+                    break;
                 }
             }
         }
@@ -551,3 +561,6 @@ export default class Othello extends Component {
         });
     }
 }
+
+// Global :(
+var num_evals;
