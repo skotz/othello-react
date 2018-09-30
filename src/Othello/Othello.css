@@ -42,7 +42,7 @@ body {
     padding-right: 15px;
     border-radius: 3px;
     background-color: #eee;
-    min-width: 100px;
+    min-width: 125px;
 }
 .black-turn .black-score,
 .white-turn .white-score {
