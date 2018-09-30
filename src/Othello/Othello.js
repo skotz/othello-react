@@ -496,8 +496,24 @@ export default class Othello extends Component {
     }
     
     evaluate(board) {
-        // Evaluation is based solely on piece count
-        return this.getScore(board, 1) - this.getScore(board, 2);
+        // Calculate piece count difference
+        var score = this.getScore(board, 1) - this.getScore(board, 2);
+        
+        // Calculate the reward or penalty of playing a piece into a specific square
+        var squares = 0;
+        for (var x = 0; x < 8; x++) {
+            for (var y = 0; y < 8; y++) {
+                if (board[x][y] === 1) {
+                    squares += square_values[x][y];
+                }
+                else if (board[x][y] === 1) {
+                    squares -= square_values[x][y];
+                }
+            }
+        }   
+        
+        // Return the heuristic evaluation of this position
+        return score + squares;
     }
     
     findMove(board, player, depth, alpha = -1000000, beta = 1000000) {
@@ -564,3 +580,13 @@ export default class Othello extends Component {
 
 // Global :(
 var num_evals;
+var square_values = [
+    [  10,  -1,   0,   0,   0,   0,  -1,  10],
+    [  -1,  -4,   0,   0,   0,   0,  -4,  -1],
+    [   0,   0,   0,   0,   0,   0,   0,   0],
+    [   0,   0,   0,   0,   0,   0,   0,   0],
+    [   0,   0,   0,   0,   0,   0,   0,   0],
+    [   0,   0,   0,   0,   0,   0,   0,   0],
+    [  -1,  -4,   0,   0,   0,   0,  -4,  -1],
+    [  10,  -1,   0,   0,   0,   0,  -1,  10]
+];
