@@ -8,6 +8,7 @@ export default class Othello extends Component {
         this.state = { 
             state: 1,
             player: 1,
+            depth: 4, /* We can increase the AI search depth once it doesn't bog down the UI */
             score: {
                 white: 2,
                 black: 2
@@ -107,6 +108,13 @@ export default class Othello extends Component {
                    white: this.getScore(newBoard, 1),
                    black: this.getScore(newBoard, 2)
                }
+            }, () => {
+                // After updating the player's move
+                if (newState === 1 && newPlayer === 2) {
+                    // Have the computer play
+                    var bestMove = this.findMove(newBoard, newPlayer, this.state.depth);
+                    this.squareHandler(bestMove.x, bestMove.y);
+                }
             });
         }
     }
@@ -479,5 +487,57 @@ export default class Othello extends Component {
         }
     
         return done;
+    }
+
+    getOtherPlayer(player) {
+        return player === 1 ? 2 : 1;
+    }
+    
+    evaluate(board) {
+        // Evaluation is based solely on piece count
+        return this.getScore(board, 1) - this.getScore(board, 2);
+    }
+    
+    findMove(board, player, depth) {
+        var opponent = this.getOtherPlayer(player);
+        if (depth <= 0) {
+            // Evaluation is based solely on piece count
+            return this.evaluate(board);
+        }
+        
+        var moves = this.getAvailableMoves(board, player);
+        if (moves.length === 0) {
+            // Player has no valid moves
+            if (this.getAvailableMoves(board, opponent).length === 0) {
+                // Opponent also has no valid moves, so the game is over
+                return this.evaluate(board);
+            }
+            
+            // Find moves for the opponent instead
+            return this.findMove(board, opponent, depth - 1);
+        }
+        
+        var best = { score: player === 1 ? -100000 : 100000, x: moves[0].x, y: moves[0].y };
+        for (let i = 0; i < moves.length; i++) {
+            // Make the move on a copy of the board
+            var copy = this.copyBoard(board);
+            this.makeMove(copy, player, moves[i].x, moves[i].y);
+            
+            // Recursively look for a good counter move
+            var counter = this.findMove(copy, opponent, depth - 1);
+            if (counter.score > best.score) {
+                best.score = counter.score;
+                best.x = moves[i].x;
+                best.y = moves[i].y;
+            }
+        }
+        
+        return best;
+    }
+    
+    copyBoard(board) {
+        return board.map(function(a) {
+            return a.slice();
+        });
     }
 }
