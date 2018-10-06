@@ -10,7 +10,14 @@ export default class Othello extends Component {
         this.worker = new Worker();
         this.worker.addEventListener('message', e => {
             var result = e.data;
-            this.squareHandler(result.x, result.y);
+            this.makeMove(result.x, result.y);
+            this.setState({ 
+                ai: { 
+                    evals: result.evals,
+                    time: result.time,
+                    nps: Math.round(result.time > 0 ? (result.evals / (result.time / 1000)) : 0)
+                } 
+            });
             console.log("Move Score: " + result.score + " Evals: " + result.evals + " Time: " + result.time);
         });
     }
@@ -34,7 +41,12 @@ export default class Othello extends Component {
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0]
-            ] };
+            ],
+            ai: { 
+                evals: 0,
+                time: 0,
+                nps: 0
+            }};
         this.engine = new Engine();
     }
     
@@ -77,6 +89,12 @@ export default class Othello extends Component {
                         </div>
                     </div>
                 </div>
+                <div className="evals">
+                    {this.state.ai.nps.toLocaleString()} nps
+                </div>
+                <div className="copyright">
+                    &copy; {new Date().getFullYear()} Scott Clayton
+                </div>
             </div>
         );
     }
@@ -100,6 +118,12 @@ export default class Othello extends Component {
     }
     
     squareHandler(x, y) {
+        if (this.state.player == 1) {
+            this.makeMove(x, y);
+        }
+    }
+    
+    makeMove(x, y) {
         if (this.engine.isValidMove(this.state.board, this.state.player, x, y)) {
             var newState = this.state.state;
             var newBoard = this.state.board;

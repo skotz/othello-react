@@ -54,7 +54,7 @@ body {
         background-color: #eee;
     }
     50% {
-        background-color: #fbb;
+        background-color: #fff;
     }
     100% {
         background-color: #eee;
@@ -196,12 +196,19 @@ body {
     }
 }
 
-body:after {
-    content: "Scott Clayton 2018";
+.evals,
+.copyright {
     position: fixed;
     bottom: 3px;
-    right: 3px;
     font-size: 10px;
     color: #777;
     z-index: -1;
+}
+
+.evals {
+    left: 3px;
+}
+
+.copyright {
+    right: 3px;
 }
