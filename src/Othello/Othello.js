@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import './Othello.css';
 import Engine from './Engine.js';
-import worker from './Engine.worker.js';
-import WebWorker from './WebWorker.js';
+import Worker from './Engine.worker.js';
     
 export default class Othello extends Component {
 
     componentDidMount() {
         // Handle playing the best move once the computer returns from its search
-        this.worker = new WebWorker(worker);
+        this.worker = new Worker();
         this.worker.addEventListener('message', e => {
-            var bestMove = e.data;
-            this.squareHandler(bestMove.x, bestMove.y);
-            console.log("Move Score: " + bestMove.score + " Evals: " + this.engine.getNumEvals());
+            var result = e.data;
+            this.squareHandler(result.x, result.y);
+            console.log("Move Score: " + result.score + " Evals: " + result.evals + " Time: " + result.time);
         });
     }
 
@@ -56,7 +55,7 @@ export default class Othello extends Component {
                     <div>
                         <div className="status-bar">
                             <div className="status">
-                                Black Player
+                                Computer (black)
                             </div>
                             <div className="scores black-score clearfix">
                                 {this.state.score.black}
@@ -70,7 +69,7 @@ export default class Othello extends Component {
                         </div>
                         <div className="status-bar">
                             <div className="status">
-                                White Player
+                                You (white)
                             </div>
                             <div className="scores white-score clearfix">
                                 {this.state.score.white}
@@ -126,7 +125,6 @@ export default class Othello extends Component {
                 // After updating the player's move
                 if (newState === 1 && newPlayer === 2) {
                     // Have the computer find the best move
-                    this.engine.setNumEvals(0);
                     this.worker.postMessage([newBoard, newPlayer, this.state.depth, JSON.stringify(this.engine)]);
                 }
             });
