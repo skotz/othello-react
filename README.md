@@ -3,7 +3,7 @@ The game of Othello written in React
 
 [Try it out!](https://skotz.github.io/othello-react/)
 
-![GIF](https://i.imgur.com/eg3igkV.gifv)
+![GIF](othello.gif)
 
 ## Play Locally
 ### Requirements
